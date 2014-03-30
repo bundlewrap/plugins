@@ -3,8 +3,8 @@ Official Blockwart Plugin Repository
 
 This repo contains community-contributed plugins for the Blockwart config management system.
 
-.. image:: https://travis-ci.org/blockwart/blockwart-plugins.png
-        :target: https://travis-ci.org/blockwart/blockwart-plugins
+.. image:: https://travis-ci.org/blockwart/plugins.svg?branch=master
+        :target: https://travis-ci.org/blockwart/plugins
 
 Blockwart is Copyright (c) 2014 `Torsten Rehn <mailto:torsten@rehn.email>`_
 
