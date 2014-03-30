@@ -11,8 +11,12 @@ BASE_PATH = dirname(__file__)
 
 def hash_directory(path):
     hasher = hashlib.sha1()
+    filelist = []
     for root, dirs, files in walk(path):
         for file in files:
+            filelist.append(join(root, file))
+    filelist.sort()
+    for file in filelist:
             with open(join(root, file)) as f:
                 hasher.update(f.read())
     return hasher.hexdigest()
