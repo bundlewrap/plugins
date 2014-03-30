@@ -4,9 +4,9 @@ from __future__ import unicode_literals
 import hashlib
 from json import loads, dumps
 from os import listdir, walk
-from os.path import dirname, isdir, join
+from os.path import dirname, isdir, join, realpath
 
-BASE_PATH = dirname(__file__)
+BASE_PATH = dirname(realpath(__file__))
 
 
 def hash_directory(path):

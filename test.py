@@ -4,11 +4,9 @@ from __future__ import unicode_literals
 
 from json import loads
 from os import listdir
-from os.path import dirname, isdir, isfile, join
+from os.path import isdir, isfile, join
 
-from update_index import hash_directory
-
-BASE_PATH = dirname(__file__)
+from update_index import BASE_PATH, hash_directory
 
 
 def fail(msg):
