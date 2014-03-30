@@ -1,0 +1,8 @@
+{
+	"desc": "Pretty stats using iTerm2 PNG support and pygal",
+	"help": "You will also need o install pycairo.\nHomebrew: brew install py2cairo\nAptitude: aptitude install python-cairo",
+	"provides": [
+		"hooks/itermstats.py"
+	],
+	"version": 1
+}

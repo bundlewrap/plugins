@@ -1,0 +1,4 @@
+pygal
+CairoSVG
+tinycss
+cssselect
