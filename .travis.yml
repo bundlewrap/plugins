@@ -1,4 +1,5 @@
 language: python
+install: true
 script: python test.py
 notifications:
   irc:
