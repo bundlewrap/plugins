@@ -42,6 +42,13 @@ for plugin in listdir(BASE_PATH):
         )
 
     for file_path in manifest['provides']:
+        if file_path in ("groups.py", "nodes.py"):
+            fail(
+                "{plugin}: must not overwrite {path}".format(
+                    path=file_path,
+                    plugin=plugin,
+                )
+            )
         if not isfile(join(BASE_PATH, plugin, file_path)):
             fail(
                 "{plugin}: '{file}' listed in manifest, but doesn't exist".format(
