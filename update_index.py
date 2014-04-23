@@ -43,16 +43,19 @@ for plugin in listdir(BASE_PATH):
         'version': manifest['version'],
     }
 
-    if new_index[plugin]['checksum'] != old_index[plugin]['checksum'] and \
-            not new_index[plugin]['version'] > old_index[plugin]['version']:
-        raise ValueError("contents for {} changed, but version wasn't incremented".format(plugin))
+    if plugin in old_index:
+        if new_index[plugin]['checksum'] != old_index[plugin]['checksum'] and \
+                not new_index[plugin]['version'] > old_index[plugin]['version']:
+            raise ValueError("contents for {} changed, but version wasn't incremented".format(plugin))
 
-    if new_index[plugin]['version'] > old_index[plugin]['version']:
-        print("{plugin}: version {oldversion} -> {newversion}".format(
-            newversion=new_index[plugin]['version'],
-            plugin=plugin,
-            oldversion=old_index[plugin]['version'],
-        ))
+        if new_index[plugin]['version'] > old_index[plugin]['version']:
+            print("{plugin}: version {oldversion} -> {newversion}".format(
+                newversion=new_index[plugin]['version'],
+                plugin=plugin,
+                oldversion=old_index[plugin]['version'],
+            ))
+    else:
+        print("{plugin}: added".format(plugin=plugin))
 
 with open(join(BASE_PATH, "index.json"), "w") as f:
     f.write(dumps(new_index, indent=4, sort_keys=True))
