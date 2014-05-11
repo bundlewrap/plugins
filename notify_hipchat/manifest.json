@@ -1,0 +1,8 @@
+{
+	"desc": "Automatically send notifications to HipChat rooms with bw apply",
+	"help": "This plugin requires some additional dependencies:\n$ pip install requests\nRunning bw apply will trigger plugin configuration.",
+	"provides": [
+		"hooks/notify_hipchat.py"
+	],
+	"version": 1
+}
