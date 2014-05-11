@@ -5,7 +5,3 @@ This repo contains community-contributed plugins for the Blockwart config manage
 
 .. image:: https://travis-ci.org/blockwart/plugins.svg?branch=master
         :target: https://travis-ci.org/blockwart/plugins
-
-Blockwart is Copyright (c) 2014 `Torsten Rehn <mailto:torsten@rehn.email>`_
-
-Blockwart is published under the GNU General Public License, version 3.
