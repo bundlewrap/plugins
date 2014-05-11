@@ -2,10 +2,15 @@ from base64 import b64encode
 from os import environ, remove
 from tempfile import NamedTemporaryFile
 
-import cairosvg
-from pygal import Config, Pie
-from pygal.style import Style
+try:
+    import cairosvg
+    from pygal import Config, Pie
+    from pygal.style import Style
+    IMPORTS = True
+except ImportError:
+    IMPORTS = False
 
+from blockwart.utils import LOG
 
 STYLE = Style(
     background='transparent',
@@ -16,6 +21,11 @@ STYLE = Style(
 
 def node_apply_end(repo, node, duration=None, interactive=None, result=None, **kwargs):
     if environ.get('TERM_PROGRAM', None) != "iTerm.app" or not interactive:
+        LOG.debug("skipping iTerm stats (wrong terminal)")
+        return
+
+    if not IMPORTS:
+        LOG.error("failed to import dependencies of itermstats plugin")
         return
 
     css_file = NamedTemporaryFile(delete=False)

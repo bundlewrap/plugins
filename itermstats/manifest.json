@@ -1,8 +1,8 @@
 {
 	"desc": "Pretty stats using iTerm2 PNG support and pygal",
-	"help": "You will also need o install pycairo.\nHomebrew: brew install py2cairo\nAptitude: aptitude install python-cairo",
+	"help": "This plugin requires some additional dependencies:\n$ pip install pygal CairoSVG tinycss cssselect\nYou will also need to install pycairo.\nHomebrew: $ brew install py2cairo",
 	"provides": [
 		"hooks/itermstats.py"
 	],
-	"version": 1
+	"version": 2
 }
