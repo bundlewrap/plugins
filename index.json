@@ -3,5 +3,10 @@
         "checksum": "01b1a6acf691fffd8ccfaba55d6e0e8270c20c80", 
         "desc": "Pretty stats using iTerm2 PNG support and pygal", 
         "version": 2
+    }, 
+    "notify_hipchat": {
+        "checksum": "a8b080b2e452c17938e8ab01a0460c026f706051", 
+        "desc": "Automatically send notifications to HipChat rooms with bw apply", 
+        "version": 1
     }
 }
