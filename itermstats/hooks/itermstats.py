@@ -12,12 +12,13 @@ except ImportError:
 
 from blockwart.utils import LOG
 
-STYLE = Style(
-    background='transparent',
-    opacity=1,
-    plot_background='transparent',
-    colors=('#00ae19', '#25ff44', '#ffde00', '#c90000'),
-)
+if IMPORTS:
+    STYLE = Style(
+        background='transparent',
+        opacity=1,
+        plot_background='transparent',
+        colors=('#00ae19', '#25ff44', '#ffde00', '#c90000'),
+    )
 
 def node_apply_end(repo, node, duration=None, interactive=None, result=None, **kwargs):
     if environ.get('TERM_PROGRAM', None) != "iTerm.app" or not interactive:

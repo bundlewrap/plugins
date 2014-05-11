@@ -1,8 +1,8 @@
 {
     "itermstats": {
-        "checksum": "01b1a6acf691fffd8ccfaba55d6e0e8270c20c80", 
+        "checksum": "d789408ea2494d3f42bfadba9d40068f0294796e", 
         "desc": "Pretty stats using iTerm2 PNG support and pygal", 
-        "version": 2
+        "version": 3
     }, 
     "notify_hipchat": {
         "checksum": "a8b080b2e452c17938e8ab01a0460c026f706051", 
