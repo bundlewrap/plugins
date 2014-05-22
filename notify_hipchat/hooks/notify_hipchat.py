@@ -4,6 +4,7 @@ from os.path import exists, join
 
 try:
     from requests import post
+    from requests.exceptions import ConnectionError
     REQUESTS = True
 except ImportError:
     REQUESTS = False
@@ -46,21 +47,24 @@ def _get_config(repo_path):
 
 
 def _notify(server, room, token, message):
-    post(
-        "https://{server}/v2/room/{room}/notification?auth_token={token}".format(
-            token=token,
-            room=room,
-            server=server,
-        ),
-        headers={
-            'content-type': 'application/json',
-        },
-        data=dumps({
-            'color': 'purple',
-            'message': message,
-            'notify': True,
-        }),
-    )
+    try:
+        post(
+            "https://{server}/v2/room/{room}/notification?auth_token={token}".format(
+                token=token,
+                room=room,
+                server=server,
+            ),
+            headers={
+                'content-type': 'application/json',
+            },
+            data=dumps({
+                'color': 'purple',
+                'message': message,
+                'notify': True,
+            }),
+        )
+    except ConnectionError as e:
+        LOG.error("Failed to submit HipChat notification: {}".format(e))
 
 
 def apply_start(repo, target, nodes, interactive=False, **kwargs):
