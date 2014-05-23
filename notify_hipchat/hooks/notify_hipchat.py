@@ -33,8 +33,8 @@ def _get_config(repo_path):
     config.read(config_path)
     if config.get("configuration", "enabled") == "unconfigured":
         LOG.error("HipChat notifications not configured. Please edit .hipchat_secrets.cfg "
-                  "and set enabled to 'yes' (or 'no' to silence this message and disable HipChat "
-                  "notifications).")
+                  "(it has already been created) and set enabled to 'yes' "
+                  "(or 'no' to silence this message and disable HipChat notifications).")
         return None
     elif config.get("configuration", "enabled").lower() not in ("yes", "true", "1"):
         LOG.debug("HipChat notifications not enabled in .hipchat_secrets.cfg, skipping...")
