@@ -69,6 +69,37 @@ def _notify(server, room, token, message):
         LOG.error("Failed to submit HipChat notification: {}".format(e))
 
 
+def action_run_end(repo, node, action, duration=None, status=None, **kwargs):
+    config = _get_config(repo.path)
+    if config is None or \
+            not config.has_section("notifications") or \
+            not config.getboolean("notifications", "show_item_results"):
+        return
+
+    if status.skipped:
+        status_string = "<b>skipped</b>"
+    elif not status.correct:
+        status_string = "<b>failed</b>"
+    else:
+        status_string = "succeeded"
+
+    for room in config.get("connection", "rooms").split(","):
+        LOG.debug("posting action apply end notification to HipChat room {room}@{server}".format(
+            room=room,
+            server=config.get("connection", "server"),
+        ))
+        _notify(
+            config.get("connection", "server"),
+            room.strip(),
+            config.get("connection", "token"),
+            "<b>{node}</b>: {action}: {status_string}".format(
+                action=action,
+                node=node.name,
+                status_string=status_string,
+            ),
+        )
+
+
 def apply_start(repo, target, nodes, interactive=False, **kwargs):
     config = _get_config(repo.path)
     if config is None:
