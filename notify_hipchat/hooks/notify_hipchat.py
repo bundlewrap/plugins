@@ -51,7 +51,7 @@ def _get_config(repo_path):
     return config
 
 
-def _notify(server, room, token, message):
+def _notify(server, room, token, message, message_format):
     try:
         post(
             "https://{server}/v2/room/{room}/notification?auth_token={token}".format(
@@ -65,6 +65,7 @@ def _notify(server, room, token, message):
             data=dumps({
                 'color': 'purple',
                 'message': message,
+                'message_format': message_format,
                 'notify': True,
             }),
         )
@@ -80,11 +81,11 @@ def action_run_end(repo, node, action, duration=None, status=None, **kwargs):
         return
 
     if status.skipped:
-        status_string = "<b>skipped</b>"
+        status_string = "(unknown)"
     elif not status.correct:
-        status_string = "<b>failed</b>"
+        status_string = "(failed)"
     else:
-        status_string = "succeeded"
+        status_string = "(successful)"
 
     for room in config.get("item_notifications", "rooms").split(","):
         LOG.debug("posting action apply end notification to HipChat room {room}@{server}".format(
@@ -95,11 +96,13 @@ def action_run_end(repo, node, action, duration=None, status=None, **kwargs):
             config.get("connection", "server"),
             room.strip(),
             config.get("connection", "token"),
-            "<b>{node}</b>: {action}: {status_string}".format(
+            "{status_string} {node}:{bundle}:{action}".format(
+                bundle=action.bundle.name,
                 action=action,
                 node=node.name,
-                status_string=status_string,
+                status_string=status_string
             ),
+            "text",
         )
 
 
@@ -125,6 +128,7 @@ def apply_start(repo, target, nodes, interactive=False, **kwargs):
                 interactive="non-" if not interactive else "",
                 target=target,
             ),
+            "html",
         )
 
 
@@ -144,6 +148,7 @@ def apply_end(repo, target, nodes, duration=None, **kwargs):
             room.strip(),
             config.get("connection", "token"),
             "Finished bw apply on <b>{target}</b>.".format(target=target),
+            "html",
         )
 
 
@@ -159,11 +164,11 @@ def item_apply_end(
     if status_before.correct:
         return
     elif status_after is None:
-        status_string = "<b>skipped</b>"
+        status_string = "(unknown)"
     elif status_after.correct:
-        status_string = "fixed"
+        status_string = "(successful)"
     else:
-        status_string = "<b>failed</b>"
+        status_string = "(failed)"
 
     for room in config.get("item_notifications", "rooms").split(","):
         LOG.debug("posting item apply end notification to HipChat room {room}@{server}".format(
@@ -174,9 +179,11 @@ def item_apply_end(
             config.get("connection", "server"),
             room.strip(),
             config.get("connection", "token"),
-            "<b>{node}</b>: {item}: {status_string}".format(
+            "{status_string} {node}:{bundle}:{item}".format(
+                bundle=item.bundle.name,
                 item=item,
                 node=node.name,
-                status_string=status_string
+                status_string=status_string,
             ),
+            "text",
         )
