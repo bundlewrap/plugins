@@ -21,6 +21,8 @@ def _create_config(path):
     config.set("connection", "server", "api.hipchat.com")
     config.set("connection", "rooms", "name_or_id_of_room1,name_or_id_of_room2")
     config.set("connection", "token", "<insert token from https://www.hipchat.com/account/api>")
+    config.add_section("notifications")
+    config.set("notifications", "show_item_results", "no")
     with open(path, 'wb') as f:
         config.write(f)
 
@@ -104,4 +106,39 @@ def apply_end(repo, target, nodes, duration=None, **kwargs):
             room.strip(),
             config.get("connection", "token"),
             "Finished bw apply on <b>{target}</b>.".format(target=target),
+        )
+
+
+def item_apply_end(
+    repo, node, item, duration=None, status_before=None, status_after=None, **kwargs
+):
+    config = _get_config(repo.path)
+    if config is None or \
+            not config.has_section("notifications") or \
+            not config.getboolean("notifications", "show_item_results"):
+        return
+
+    if status_before.correct:
+        return
+    elif status_after is None:
+        status_string = "<b>skipped</b>"
+    elif status_after.correct:
+        status_string = "fixed"
+    else:
+        status_string = "<b>failed</b>"
+
+    for room in config.get("connection", "rooms").split(","):
+        LOG.debug("posting item apply end notification to HipChat room {room}@{server}".format(
+            room=room,
+            server=config.get("connection", "server"),
+        ))
+        _notify(
+            config.get("connection", "server"),
+            room.strip(),
+            config.get("connection", "token"),
+            "<b>{node}</b>: {item}: {status_string}".format(
+                item=item,
+                node=node.name,
+                status_string=status_string
+            ),
         )
