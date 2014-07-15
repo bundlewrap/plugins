@@ -19,10 +19,13 @@ def _create_config(path):
     config.set("configuration", "enabled", "unconfigured")
     config.add_section("connection")
     config.set("connection", "server", "api.hipchat.com")
-    config.set("connection", "rooms", "name_or_id_of_room1,name_or_id_of_room2")
     config.set("connection", "token", "<insert token from https://www.hipchat.com/account/api>")
-    config.add_section("notifications")
-    config.set("notifications", "show_item_results", "no")
+    config.add_section("apply_notifications")
+    config.set("apply_notifications", "enabled", "yes")
+    config.set("apply_notifications", "rooms", "name_or_id_of_room1,name_or_id_of_room2")
+    config.add_section("item_notifications")
+    config.set("item_notifications", "enabled", "no")
+    config.set("item_notifications", "rooms", "name_or_id_of_room1,name_or_id_of_room2")
     with open(path, 'wb') as f:
         config.write(f)
 
@@ -72,8 +75,8 @@ def _notify(server, room, token, message):
 def action_run_end(repo, node, action, duration=None, status=None, **kwargs):
     config = _get_config(repo.path)
     if config is None or \
-            not config.has_section("notifications") or \
-            not config.getboolean("notifications", "show_item_results"):
+            not config.has_section("item_notifications") or \
+            not config.getboolean("item_notifications", "enabled"):
         return
 
     if status.skipped:
@@ -83,7 +86,7 @@ def action_run_end(repo, node, action, duration=None, status=None, **kwargs):
     else:
         status_string = "succeeded"
 
-    for room in config.get("connection", "rooms").split(","):
+    for room in config.get("item_notifications", "rooms").split(","):
         LOG.debug("posting action apply end notification to HipChat room {room}@{server}".format(
             room=room,
             server=config.get("connection", "server"),
@@ -102,9 +105,11 @@ def action_run_end(repo, node, action, duration=None, status=None, **kwargs):
 
 def apply_start(repo, target, nodes, interactive=False, **kwargs):
     config = _get_config(repo.path)
-    if config is None:
+    if config is None or \
+            not config.has_section("apply_notifications") or \
+            not config.getboolean("apply_notifications", "enabled"):
         return
-    for room in config.get("connection", "rooms").split(","):
+    for room in config.get("apply_notifications", "rooms").split(","):
         LOG.debug("posting apply start notification to HipChat room {room}@{server}".format(
             room=room,
             server=config.get("connection", "server"),
@@ -125,9 +130,11 @@ def apply_start(repo, target, nodes, interactive=False, **kwargs):
 
 def apply_end(repo, target, nodes, duration=None, **kwargs):
     config = _get_config(repo.path)
-    if config is None:
+    if config is None or \
+            not config.has_section("apply_notifications") or \
+            not config.getboolean("apply_notifications", "enabled"):
         return
-    for room in config.get("connection", "rooms").split(","):
+    for room in config.get("apply_notifications", "rooms").split(","):
         LOG.debug("posting apply end notification to HipChat room {room}@{server}".format(
             room=room,
             server=config.get("connection", "server"),
@@ -145,8 +152,8 @@ def item_apply_end(
 ):
     config = _get_config(repo.path)
     if config is None or \
-            not config.has_section("notifications") or \
-            not config.getboolean("notifications", "show_item_results"):
+            not config.has_section("item_notifications") or \
+            not config.getboolean("item_notifications", "enabled"):
         return
 
     if status_before.correct:
@@ -158,7 +165,7 @@ def item_apply_end(
     else:
         status_string = "<b>failed</b>"
 
-    for room in config.get("connection", "rooms").split(","):
+    for room in config.get("item_notifications", "rooms").split(","):
         LOG.debug("posting item apply end notification to HipChat room {room}@{server}".format(
             room=room,
             server=config.get("connection", "server"),

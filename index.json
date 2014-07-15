@@ -5,8 +5,8 @@
         "version": 3
     }, 
     "notify_hipchat": {
-        "checksum": "5a272dccece64e8f5af580d10fec01b9013e6b7f", 
+        "checksum": "ea6710322d93003916720054fc48af5b206b1c4c", 
         "desc": "Automatically send notifications to HipChat rooms with bw apply", 
-        "version": 4
+        "version": 5
     }
 }
