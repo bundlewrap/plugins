@@ -4,5 +4,5 @@
 	"provides": [
 		"hooks/notify_hipchat.py"
 	],
-	"version": 6
+	"version": 7
 }

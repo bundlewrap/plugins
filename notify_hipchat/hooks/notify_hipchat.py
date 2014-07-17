@@ -51,7 +51,7 @@ def _get_config(repo_path):
     return config
 
 
-def _notify(server, room, token, message, message_format):
+def _notify(server, room, token, message, message_format, color="gray"):
     try:
         post(
             "https://{server}/v2/room/{room}/notification?auth_token={token}".format(
@@ -63,7 +63,7 @@ def _notify(server, room, token, message, message_format):
                 'content-type': 'application/json',
             },
             data=dumps({
-                'color': 'purple',
+                'color': color,
                 'message': message,
                 'message_format': message_format,
                 'notify': True,
@@ -80,11 +80,15 @@ def action_run_end(repo, node, action, duration=None, status=None, **kwargs):
             not config.getboolean("item_notifications", "enabled"):
         return
 
+    color = "gray"
     if status.skipped:
+        color = "purple"
         status_string = "(unknown)"
     elif not status.correct:
+        color = "red"
         status_string = "(failed)"
     else:
+        color = "green"
         status_string = "(successful)"
 
     for room in config.get("item_notifications", "rooms").split(","):
@@ -100,9 +104,10 @@ def action_run_end(repo, node, action, duration=None, status=None, **kwargs):
                 bundle=action.bundle.name,
                 action=action,
                 node=node.name,
-                status_string=status_string
+                status_string=status_string,
             ),
             "text",
+            color=color,
         )
 
 
@@ -161,13 +166,17 @@ def item_apply_end(
             not config.getboolean("item_notifications", "enabled"):
         return
 
+    color = "gray"
     if status_before.correct:
         return
     elif status_after is None:
+        color = "purple"
         status_string = "(unknown)"
     elif status_after.correct:
+        color = "green"
         status_string = "(successful)"
     else:
+        color = "red"
         status_string = "(failed)"
 
     for room in config.get("item_notifications", "rooms").split(","):
@@ -186,4 +195,5 @@ def item_apply_end(
                 status_string=status_string,
             ),
             "text",
+            color=color,
         )
