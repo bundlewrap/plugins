@@ -9,7 +9,7 @@ try:
 except ImportError:
     REQUESTS = False
 
-from blockwart.utils import LOG
+from bundlewrap.utils import LOG
 
 
 def _create_config(path):

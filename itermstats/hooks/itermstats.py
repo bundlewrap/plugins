@@ -10,7 +10,7 @@ try:
 except ImportError:
     IMPORTS = False
 
-from blockwart.utils import LOG
+from bundlewrap.utils import LOG
 
 if IMPORTS:
     STYLE = Style(
