@@ -4,5 +4,5 @@
 	"provides": [
 		"hooks/itermstats.py"
 	],
-	"version": 3
+	"version": 4
 }

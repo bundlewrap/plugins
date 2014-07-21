@@ -1,12 +1,12 @@
 {
     "itermstats": {
-        "checksum": "d789408ea2494d3f42bfadba9d40068f0294796e", 
+        "checksum": "5362cba892b1975a528eaa63b135b39f389f3639", 
         "desc": "Pretty stats using iTerm2 PNG support and pygal", 
-        "version": 3
+        "version": 4
     }, 
     "notify_hipchat": {
-        "checksum": "88149df1c5be5eeaea25037e9644fa82c4f5585b", 
+        "checksum": "e9f9447c53d6585c6d3a12df845e541d5b8b3021", 
         "desc": "Automatically send notifications to HipChat rooms with bw apply", 
-        "version": 7
+        "version": 8
     }
 }
