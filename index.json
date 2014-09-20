@@ -8,5 +8,10 @@
         "checksum": "e9f9447c53d6585c6d3a12df845e541d5b8b3021", 
         "desc": "Automatically send notifications to HipChat rooms with bw apply", 
         "version": 8
+    }, 
+    "pwget": {
+        "checksum": "8cd8fc3c79851d717751c2e4a17335f4aa952ea6", 
+        "desc": "Derive passwords in your repo from a shared secret", 
+        "version": 1
     }
 }
