@@ -1,4 +1,9 @@
 {
+    "item_git_deploy": {
+        "checksum": "ce4b9a498e17c98f8e40dd6a8ea7a48463743816", 
+        "desc": "Item type for managing git checkouts", 
+        "version": 1
+    }, 
     "itermstats": {
         "checksum": "5362cba892b1975a528eaa63b135b39f389f3639", 
         "desc": "Pretty stats using iTerm2 PNG support and pygal", 
