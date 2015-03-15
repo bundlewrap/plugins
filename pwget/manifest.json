@@ -1,8 +1,8 @@
 {
 	"desc": "Derive passwords in your repo from a shared secret",
-	"help": "This plugin is meant to provide passwords for automation user accounts (e.g. client and server side of replication). It allows you to avoid committing sensitive credentials into your repo, but the security of all passwords depends on the shared secret being kept safe.\n\nUsage:\n1. Add 'pwget.secret' to your gitignore or equivalent\n2. Run this: # dd if=/dev/urandom bs=64 count=1 | base64 > pwget.secret\n3. Distribute the resulting secret file among your team (DO NOT COMMIT IT)\n4. In templates and bundles you can now generate passwords like this:\n\n    repo.libs.pw.get(repo, 'some arbitrary identifier')\n\nThe same identifiers will always yield the same password.",
+	"help": "This plugin is meant to provide passwords for automation user accounts (e.g. client and server side of replication). It allows you to avoid committing sensitive credentials into your repo, but the security of all passwords depends on the shared secret being kept safe (either as a plaintext file or in the Mac OS Keychain).\n\nUsage:\n1. Add 'pwget.secret' to your gitignore or equivalent\n2. Run this: # dd if=/dev/urandom bs=64 count=1 | base64 > pwget.secret\n3. Distribute the resulting secret file among your team (DO NOT COMMIT IT)\n4. In templates and bundles you can now generate passwords like this:\n\n    repo.libs.pw.get(repo, 'some arbitrary identifier')\n\nThe same identifiers will always yield the same password. Try using pwget without setting a secret to get instructions on using it with the Mac OS Keychain.",
 	"provides": [
 		"libs/pw.py"
 	],
-	"version": 1
+	"version": 2
 }

@@ -15,8 +15,8 @@
         "version": 8
     }, 
     "pwget": {
-        "checksum": "8cd8fc3c79851d717751c2e4a17335f4aa952ea6", 
+        "checksum": "24e1214dab836114ba187bae8202a00cf51bcfcf", 
         "desc": "Derive passwords in your repo from a shared secret", 
-        "version": 1
+        "version": 2
     }
 }
