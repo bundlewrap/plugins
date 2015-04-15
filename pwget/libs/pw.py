@@ -1,6 +1,6 @@
 import hashlib
 import hmac
-from os.path import join
+from os.path import dirname, join
 from random import Random
 from pipes import quote
 from string import ascii_letters, punctuation, digits
@@ -55,7 +55,7 @@ def ensure_secret(path):
     return secret
 
 
-def get(repo, identifier, length=32, symbols=False):
+def get(identifier, length=32, symbols=False):
     """
     Derives a password from the given identifier and the shared secret
     in the repository.
@@ -66,7 +66,7 @@ def get(repo, identifier, length=32, symbols=False):
     One could just use the HMAC digest itself as a password, but the
     PRNG allows for more control over password length and complexity.
     """
-    secret = ensure_secret(repo.path)
+    secret = ensure_secret(dirname(dirname(__file__)))
     h = hmac.new(secret, digestmod=hashlib.sha512)
     h.update(identifier)
     prng = Random()
