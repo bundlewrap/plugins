@@ -53,11 +53,15 @@ def _ensure_secret(path):
                 path=secret_path,
             ),
         )
+    if secret.strip() == "dummy":
+        return None
     return secret
 
 
 def _get_fernet_key():
     secret = _ensure_secret(dirname(dirname(__file__)))
+    if secret is None:
+        return None
     return base64.urlsafe_b64encode(base64.b64decode(secret)[:32])
 
 
@@ -66,6 +70,8 @@ def decrypt(cryptotext):
     Decrypts a given encrypted password.
     """
     fernet_key = _get_fernet_key()
+    if fernet_key is None:
+        return "dummy"
     try:
         from cryptography.fernet import Fernet
     except ImportError:
@@ -81,6 +87,8 @@ def encrypt(plaintext):
     be fed into decrypt() to get the password back.
     """
     fernet_key = _get_fernet_key()
+    if fernet_key is None:
+        raise ValueError("cannot encrypt with dummy secret")
     try:
         from cryptography.fernet import Fernet
     except ImportError:
@@ -102,6 +110,8 @@ def get(identifier, length=32, symbols=False):
     PRNG allows for more control over password length and complexity.
     """
     secret = _ensure_secret(dirname(dirname(__file__)))
+    if secret is None:
+        return "dummy"
     h = hmac.new(secret, digestmod=hashlib.sha512)
     h.update(identifier.encode('utf-8'))
     prng = Random()
