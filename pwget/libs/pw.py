@@ -1,3 +1,4 @@
+import base64
 import hashlib
 import hmac
 from os.path import dirname, join
@@ -11,7 +12,7 @@ from sys import platform
 SECRET_FILENAME = "pwget.secret"
 
 
-def ensure_secret(path):
+def _ensure_secret(path):
     secret_path = join(path, SECRET_FILENAME)
     try:
         with open(secret_path) as f:
@@ -55,6 +56,40 @@ def ensure_secret(path):
     return secret
 
 
+def _get_fernet_key():
+    secret = _ensure_secret(dirname(dirname(__file__)))
+    return base64.urlsafe_b64encode(base64.b64decode(secret)[:32])
+
+
+def decrypt(cryptotext):
+    """
+    Decrypts a given encrypted password.
+    """
+    fernet_key = _get_fernet_key()
+    try:
+        from cryptography.fernet import Fernet
+    except ImportError:
+        raise ImportError("Unable to import the cryptography library. "
+                          "Install using: pip install cryptography")
+    f = Fernet(fernet_key)
+    return f.decrypt(cryptotext.encode('utf-8')).decode('utf-8')
+
+
+def encrypt(plaintext):
+    """
+    Encrypts a given plaintext password and returns a string that can
+    be fed into decrypt() to get the password back.
+    """
+    fernet_key = _get_fernet_key()
+    try:
+        from cryptography.fernet import Fernet
+    except ImportError:
+        raise ImportError("Unable to import the cryptography library. "
+                          "Install using: pip install cryptography")
+    f = Fernet(fernet_key)
+    return f.encrypt(plaintext.encode('utf-8')).decode('utf-8')
+
+
 def get(identifier, length=32, symbols=False):
     """
     Derives a password from the given identifier and the shared secret
@@ -66,9 +101,9 @@ def get(identifier, length=32, symbols=False):
     One could just use the HMAC digest itself as a password, but the
     PRNG allows for more control over password length and complexity.
     """
-    secret = ensure_secret(dirname(dirname(__file__)))
+    secret = _ensure_secret(dirname(dirname(__file__)))
     h = hmac.new(secret, digestmod=hashlib.sha512)
-    h.update(identifier)
+    h.update(identifier.encode('utf-8'))
     prng = Random()
     prng.seed(h.digest())
     alphabet = ascii_letters + digits
