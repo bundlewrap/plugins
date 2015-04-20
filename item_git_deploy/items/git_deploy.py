@@ -109,7 +109,7 @@ def git_command(cmdline, repo_dir):
             command=cmdline[1],
             dir=repo_dir,
         ))
-    return stdout.strip()
+    return stdout.decode('utf-8').strip()
 
 
 class GitDeploy(Item):
@@ -208,6 +208,6 @@ class GitDeploy(Item):
         if status_result.return_code != 0:
             return ItemStatus(correct=False, info={'rev': None})
         else:
-            rev = status_result.stdout.strip()
+            rev = status_result.stdout.decode('utf-8').strip()
             correct = (rev == self._expanded_rev)
             return ItemStatus(correct=correct, info={'rev': rev})
