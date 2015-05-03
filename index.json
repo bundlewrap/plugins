@@ -14,6 +14,11 @@
         "desc": "Automatically send notifications to HipChat rooms with bw apply", 
         "version": 8
     }, 
+    "notify_slack": {
+        "checksum": "269f1321daac1919a9ea8890e62714f5dfd7c33a", 
+        "desc": "Automatically send notifications to Slack rooms with bw apply", 
+        "version": 1
+    }, 
     "pwget": {
         "checksum": "03983b012a5c3e68cb844b1a7d1bb422cdf789b0", 
         "desc": "Derive passwords in your repo from a shared secret", 
