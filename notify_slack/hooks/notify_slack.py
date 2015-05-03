@@ -1,4 +1,7 @@
-from ConfigParser import SafeConfigParser
+try:
+    from configparser import SafeConfigParser
+except ImportError:
+    from ConfigParser import SafeConfigParser
 from json import dumps
 from os.path import exists, join
 

@@ -10,14 +10,14 @@
         "version": 4
     }, 
     "notify_hipchat": {
-        "checksum": "e9f9447c53d6585c6d3a12df845e541d5b8b3021", 
+        "checksum": "fbb246a863fc911532815f199cd080581881f306", 
         "desc": "Automatically send notifications to HipChat rooms with bw apply", 
-        "version": 8
+        "version": 9
     }, 
     "notify_slack": {
-        "checksum": "269f1321daac1919a9ea8890e62714f5dfd7c33a", 
+        "checksum": "bdf6da504d1d688bb1d9eb0de34b85afbc504a12", 
         "desc": "Automatically send notifications to Slack rooms with bw apply", 
-        "version": 1
+        "version": 2
     }, 
     "pwget": {
         "checksum": "03983b012a5c3e68cb844b1a7d1bb422cdf789b0", 
