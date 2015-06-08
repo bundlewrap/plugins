@@ -8,7 +8,10 @@ from string import ascii_letters, punctuation, digits
 from subprocess import CalledProcessError, check_output
 from sys import platform
 
+from bundlewrap.utils import get_file_contents
 
+
+DATA_DIR = join(dirname(dirname(__file__)), "data")
 SECRET_FILENAME = "pwget.secret"
 
 
@@ -58,10 +61,13 @@ def _ensure_secret(path):
     return secret
 
 
-def _get_fernet_key():
+def _get_fernet_key(dummy_allowed=True):
     secret = _ensure_secret(dirname(dirname(__file__)))
     if secret is None:
-        return None
+        if dummy_allowed:
+            return None
+        else:
+            raise ValueError("cannot encrypt with dummy secret")
     return base64.urlsafe_b64encode(base64.b64decode(secret)[:32])
 
 
@@ -81,14 +87,29 @@ def decrypt(cryptotext):
     return f.decrypt(cryptotext.encode('utf-8')).decode('utf-8')
 
 
+def decrypt_file(source_path):
+    """
+    Decrypts the file at source_path (relative to data/) and
+    returns the plaintext as bytes.
+    """
+    fernet_key = _get_fernet_key()
+    if fernet_key is None:
+        return b"dummy\n"
+    try:
+        from cryptography.fernet import Fernet
+    except ImportError:
+        raise ImportError("Unable to import the cryptography library. "
+                          "Install using: pip install cryptography")
+    f = Fernet(fernet_key)
+    return f.decrypt(get_file_contents(join(DATA_DIR, source_path)))
+
+
 def encrypt(plaintext):
     """
     Encrypts a given plaintext password and returns a string that can
     be fed into decrypt() to get the password back.
     """
-    fernet_key = _get_fernet_key()
-    if fernet_key is None:
-        raise ValueError("cannot encrypt with dummy secret")
+    fernet_key = _get_fernet_key(dummy_allowed=False)
     try:
         from cryptography.fernet import Fernet
     except ImportError:
@@ -96,6 +117,26 @@ def encrypt(plaintext):
                           "Install using: pip install cryptography")
     f = Fernet(fernet_key)
     return f.encrypt(plaintext.encode('utf-8')).decode('utf-8')
+
+
+def encrypt_file(source_path, target_path):
+    """
+    Encrypts the file at source_path and places the result at
+    target_path. The source_path is relative to CWD or absolute, while
+    target_path is relative to data/.
+    """
+    plaintext = get_file_contents(source_path)
+    fernet_key = _get_fernet_key(dummy_allowed=False)
+    try:
+        from cryptography.fernet import Fernet
+    except ImportError:
+        raise ImportError("Unable to import the cryptography library. "
+                          "Install using: pip install cryptography")
+    fernet = Fernet(fernet_key)
+    target_file = join(DATA_DIR, target_path)
+    with open(target_file, 'wb') as f:
+        f.write(fernet.encrypt(plaintext))
+    return target_file
 
 
 def get(identifier, length=32, symbols=False):
