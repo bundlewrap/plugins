@@ -2,7 +2,6 @@ import base64
 import hashlib
 import hmac
 from os.path import dirname, join
-from random import Random
 from pipes import quote
 from string import ascii_letters, punctuation, digits
 from subprocess import CalledProcessError, check_output
@@ -153,11 +152,27 @@ def get(identifier, length=32, symbols=False):
     secret = _ensure_secret(dirname(dirname(__file__)))
     if secret is None:
         return "dummy"
-    h = hmac.new(secret, digestmod=hashlib.sha512)
-    h.update(identifier.encode('utf-8'))
-    prng = Random()
-    prng.seed(h.digest())
+
     alphabet = ascii_letters + digits
     if symbols:
         alphabet += punctuation
-    return "".join([prng.choice(alphabet) for i in range(length)])
+
+    h = hmac.new(secret, digestmod=hashlib.sha512)
+    h.update(identifier.encode('utf-8'))
+    prng = random(h.digest())
+    return "".join([alphabet[next(prng) % (len(alphabet) - 1)] for i in range(length)])
+
+
+def random(seed):
+    """
+    Provides a way to get repeatable random numbers from the given seed.
+
+    Unlike random.seed(), this approach provides consistent results
+    across platforms.
+
+    See also http://stackoverflow.com/a/18992474
+    """
+    while True:
+        seed = hashlib.sha512(seed).digest()
+        for character in seed:
+            yield ord(character)
