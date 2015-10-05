@@ -175,4 +175,7 @@ def random(seed):
     while True:
         seed = hashlib.sha512(seed).digest()
         for character in seed:
-            yield ord(character)
+            try:
+                yield ord(character)
+            except TypeError:  # Python 3
+                yield character
