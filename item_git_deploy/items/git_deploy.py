@@ -10,9 +10,10 @@ from subprocess import PIPE, Popen
 from tempfile import mkdtemp, NamedTemporaryFile
 
 from bundlewrap.exceptions import RepositoryError
-from bundlewrap.items import Item, ItemStatus
-from bundlewrap.utils import cached_property, LOG
-from bundlewrap.utils.text import bold, mark_for_translation as _, randstr
+from bundlewrap.items import Item
+from bundlewrap.utils import cached_property
+from bundlewrap.utils.text import mark_for_translation as _, randstr
+from bundlewrap.utils.ui import io
 
 
 REPO_MAP_FILENAME = "git_deploy_repos"
@@ -53,11 +54,11 @@ def get_local_repo_path(bw_repo_path, repo_name):
     """
     repo_map_path = join(bw_repo_path, REPO_MAP_FILENAME)
     if not isfile(repo_map_path):
-        LOG.error(_("missing repo map for git_deploy at {}").format(repo_map_path))
-        LOG.error(_("you must create this file with the following format:"))
-        LOG.error(_("  <value of repo attribute on git_deploy item>: "
+        io.stderr(_("missing repo map for git_deploy at {}").format(repo_map_path))
+        io.stderr(_("you must create this file with the following format:"))
+        io.stderr(_("  <value of repo attribute on git_deploy item>: "
                     "<absolute path to local git repo>"))
-        LOG.error(_("since the path is local, you should also add the "
+        io.stderr(_("since the path is local, you should also add the "
                     "{} file to your gitignore").format(REPO_MAP_FILENAME))
         raise RepositoryError(_("missing repo map for git_deploy"))
 
@@ -90,7 +91,7 @@ def git_command(cmdline, repo_dir):
     Returns stdout of the command.
     """
     cmdline = ["git"] + cmdline
-    LOG.debug(_("running '{}' in {}").format(
+    io.debug(_("running '{}' in {}").format(
         " ".join(cmdline),
         repo_dir,
     ))
@@ -102,9 +103,9 @@ def git_command(cmdline, repo_dir):
     )
     stdout, stderr = git_process.communicate()
     if git_process.returncode != 0:
-        LOG.error(_("failed command: {}").format(" ".join(cmdline)))
-        LOG.error(_("stdout:\n{}").format(stdout))
-        LOG.error(_("stderr:\n{}").format(stderr))
+        io.stderr(_("failed command: {}").format(" ".join(cmdline)))
+        io.stderr(_("stdout:\n{}").format(stdout))
+        io.stderr(_("stderr:\n{}").format(stderr))
         raise RuntimeError(_("`git {command}` failed in {dir}").format(
             command=cmdline[1],
             dir=repo_dir,
@@ -124,7 +125,6 @@ class GitDeploy(Item):
         'use_xattrs': False,
     }
     ITEM_TYPE_NAME = "git_deploy"
-    PARALLEL_APPLY = False
     REQUIRED_ATTRIBUTES = ['repo', 'rev']
 
     def __repr__(self):
@@ -146,18 +146,14 @@ class GitDeploy(Item):
     def _repo_dir(self):
         if "://" in self.attributes['repo']:
             repo_dir = clone_to_dir(self.attributes['repo'], self.attributes['rev'])
-            LOG.debug(_("registering {} for deletion on exit").format(repo_dir))
+            io.debug(_("registering {} for deletion on exit").format(repo_dir))
             at_exit(rmtree, repo_dir)
         else:
             repo_dir = get_local_repo_path(self.node.repo.path, self.attributes['repo'])
         return repo_dir
 
-    def ask(self, status):
-        return "{} {}\n  → {}\n".format(
-            bold(_("rev")),
-            status.info['rev'],
-            self._expanded_rev,
-        )
+    def cdict(self):
+        return {'rev': self._expanded_rev}
 
     def fix(self, status):
         archive_local = NamedTemporaryFile(delete=False)
@@ -206,8 +202,6 @@ class GitDeploy(Item):
                 may_fail=True,
             )
         if status_result.return_code != 0:
-            return ItemStatus(correct=False, info={'rev': None})
+            return {}
         else:
-            rev = status_result.stdout.decode('utf-8').strip()
-            correct = (rev == self._expanded_rev)
-            return ItemStatus(correct=correct, info={'rev': rev})
+            return {'rev': status_result.stdout.decode('utf-8').strip()}
