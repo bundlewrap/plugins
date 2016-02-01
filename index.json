@@ -1,8 +1,8 @@
 {
     "item_git_deploy": {
-        "checksum": "f37b2457ad58abf2e4c9536c3170487e5fc8eb56", 
+        "checksum": "7387ae532615ec2f6a21e55022ac9caa43e39b29", 
         "desc": "Item type for managing git checkouts", 
-        "version": 3
+        "version": 4
     }, 
     "itermstats": {
         "checksum": "5362cba892b1975a528eaa63b135b39f389f3639", 

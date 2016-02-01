@@ -190,7 +190,7 @@ class GitDeploy(Item):
         finally:
             remove(archive_local.name)
 
-    def get_status(self):
+    def sdict(self):
         if self.attributes['use_xattrs']:
             status_result = self.node.run(
                 "attr -q -g bw_git_deploy_rev {}".format(quote(self.name)),
