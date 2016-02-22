@@ -157,7 +157,7 @@ def get(identifier, length=32, symbols=False):
     if symbols:
         alphabet += punctuation
 
-    h = hmac.new(secret, digestmod=hashlib.sha512)
+    h = hmac.new(secret.encode('utf-8'), digestmod=hashlib.sha512)
     h.update(identifier.encode('utf-8'))
     prng = random(h.digest())
     return "".join([alphabet[next(prng) % (len(alphabet) - 1)] for i in range(length)])
