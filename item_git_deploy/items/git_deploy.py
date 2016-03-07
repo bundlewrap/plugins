@@ -202,6 +202,6 @@ class GitDeploy(Item):
                 may_fail=True,
             )
         if status_result.return_code != 0:
-            return {}
+            return None
         else:
             return {'rev': status_result.stdout.decode('utf-8').strip()}

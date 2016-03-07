@@ -4,5 +4,5 @@
 	"provides": [
 		"items/git_deploy.py"
 	],
-	"version": 4
+	"version": 5
 }
