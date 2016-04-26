@@ -4,5 +4,5 @@
 	"provides": [
 		"libs/pw.py"
 	],
-	"version": 9
+	"version": 10
 }

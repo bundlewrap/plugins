@@ -30,7 +30,7 @@ def _ensure_secret(path):
                     "-s",
                     "bundlewrap",
                     "-w",
-                ]).strip()
+                ]).strip().decode('utf-8')
             except CalledProcessError:
                 raise IOError(
                     "Unable to read pwget secret from {path} or Mac OS Keychain. "
