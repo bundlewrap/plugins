@@ -4,5 +4,5 @@
 	"provides": [
 		"hooks/notify_slack.py"
 	],
-	"version": 2
+	"version": 3
 }
