@@ -54,7 +54,7 @@ def _get_config(repo_path):
         _create_config(config_path)
     config = SafeConfigParser()
     config.read(config_path)
-    if config.get("configuration", "enabled") == "unconfigured":
+    if config.get("configuration", "enabled", fallback="unconfigured") == "unconfigured":
         io.stderr("Slack notifications not configured. Please edit .slack.cfg "
                   "(it has already been created) and set enabled to 'yes' "
                   "(or 'no' to silence this message and disable Slack notifications).")
