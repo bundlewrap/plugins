@@ -44,7 +44,7 @@ def _create_config(path):
     config.set("apply_notifications", "enabled", "yes")
     config.set("apply_notifications", "allow_groups", "all")
     config.set("apply_notifications", "deny_groups", "local")
-    with open(path, 'wb') as f:
+    with open(path, 'w') as f:
         config.write(f)
 
 
