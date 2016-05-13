@@ -12,7 +12,7 @@ try:
 except ImportError:
     REQUESTS = False
 
-from bundlewrap.utils import LOG
+from bundlewrap.utils.ui import io
 
 
 def _check_allowed_groups(config, nodes):
@@ -32,7 +32,7 @@ def _check_allowed_groups(config, nodes):
 
 
 def _create_config(path):
-    LOG.debug("writing initial config for Slack notifications to .slack.cfg")
+    io.debug("writing initial config for Slack notifications to .slack.cfg")
     config = SafeConfigParser()
     config.add_section("configuration")
     config.set("configuration", "enabled", "unconfigured")
@@ -55,15 +55,15 @@ def _get_config(repo_path):
     config = SafeConfigParser()
     config.read(config_path)
     if config.get("configuration", "enabled") == "unconfigured":
-        LOG.error("Slack notifications not configured. Please edit .slack.cfg "
+        io.stderr("Slack notifications not configured. Please edit .slack.cfg "
                   "(it has already been created) and set enabled to 'yes' "
                   "(or 'no' to silence this message and disable Slack notifications).")
         return None
     elif config.get("configuration", "enabled").lower() not in ("yes", "true", "1"):
-        LOG.debug("Slack notifications not enabled in .slack.cfg, skipping...")
+        io.debug("Slack notifications not enabled in .slack.cfg, skipping...")
         return None
     elif not REQUESTS:
-        LOG.error("Slack notifications need the requests library. "
+        io.stderr("Slack notifications need the requests library. "
                   "You can usually install it with `pip install requests`.")
         return None
     return config
@@ -108,7 +108,7 @@ def _notify(url, message=None, title=None, fallback=None, user=None, target=None
             data=dumps(payload),
         )
     except ConnectionError as e:
-        LOG.error("Failed to submit Slack notification: {}".format(e))
+        io.stderr("Failed to submit Slack notification: {}".format(e))
 
 
 def apply_start(repo, target, nodes, interactive=False, **kwargs):
@@ -118,7 +118,7 @@ def apply_start(repo, target, nodes, interactive=False, **kwargs):
             not config.getboolean("apply_notifications", "enabled") or \
             not _check_allowed_groups(config, nodes):
         return
-    LOG.debug("posting apply start notification to Slack")
+    io.debug("posting apply start notification to Slack")
     _notify(
         config.get("connection", "url"),
         fallback="Starting bw apply to {target} as {user}".format(
@@ -140,7 +140,7 @@ def apply_end(repo, target, nodes, duration=None, **kwargs):
             not config.getboolean("apply_notifications", "enabled") or \
             not _check_allowed_groups(config, nodes):
         return
-    LOG.debug("posting apply end notification to Slack")
+    io.debug("posting apply end notification to Slack")
     _notify(
         config.get("connection", "url"),
         color="good",
