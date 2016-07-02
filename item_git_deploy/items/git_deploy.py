@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from atexit import register as at_exit
-from os import remove
+from os import remove, setpgrp
 from os.path import isfile, join
 from pipes import quote
 from shutil import rmtree
@@ -98,6 +98,7 @@ def git_command(cmdline, repo_dir):
     git_process = Popen(
         cmdline,
         cwd=repo_dir,
+        preexec_fn=setpgrp,
         stderr=PIPE,
         stdout=PIPE,
     )
