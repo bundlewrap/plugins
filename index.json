@@ -1,27 +1,32 @@
 {
+    "item_download": {
+        "checksum": "417483dd1d7897cb25e42dc4b0a161b182088e24", 
+        "desc": "Download a file from a webserver and verifies its Hash", 
+        "version": 1
+    }, 
     "item_git_deploy": {
-        "checksum": "63ee7962325d88ce8bc056d6bb3fde9ab7104074",
-        "desc": "Item type for managing git checkouts",
+        "checksum": "63ee7962325d88ce8bc056d6bb3fde9ab7104074", 
+        "desc": "Item type for managing git checkouts", 
         "version": 6
-    },
+    }, 
     "itermstats": {
-        "checksum": "5362cba892b1975a528eaa63b135b39f389f3639",
-        "desc": "Pretty stats using iTerm2 PNG support and pygal",
+        "checksum": "5362cba892b1975a528eaa63b135b39f389f3639", 
+        "desc": "Pretty stats using iTerm2 PNG support and pygal", 
         "version": 4
-    },
+    }, 
     "notify_hipchat": {
-        "checksum": "fbb246a863fc911532815f199cd080581881f306",
-        "desc": "Automatically send notifications to HipChat rooms with bw apply",
+        "checksum": "fbb246a863fc911532815f199cd080581881f306", 
+        "desc": "Automatically send notifications to HipChat rooms with bw apply", 
         "version": 9
-    },
+    }, 
     "notify_slack": {
-        "checksum": "bdf6da504d1d688bb1d9eb0de34b85afbc504a12",
-        "desc": "Automatically send notifications to Slack rooms with bw apply",
-        "version": 2
-    },
+        "checksum": "701ae6ab27f32a716391005f528c51aac0007bdc", 
+        "desc": "Automatically send notifications to Slack rooms with bw apply", 
+        "version": 3
+    }, 
     "pwget": {
-        "checksum": "59583c467c2558dd60492c2e82250453c853bd9d",
-        "desc": "Derive passwords in your repo from a shared secret",
+        "checksum": "59583c467c2558dd60492c2e82250453c853bd9d", 
+        "desc": "Derive passwords in your repo from a shared secret", 
         "version": 10
     }
 }
