@@ -22,41 +22,41 @@ def hash_directory(path):
     return hasher.hexdigest()
 
 
-new_index = {}
-with open(join(BASE_PATH, "index.json")) as f:
-    old_index = loads(f.read())
+if __name__ == '__main__':
+    new_index = {}
+    with open(join(BASE_PATH, "index.json")) as f:
+        old_index = loads(f.read())
 
-for plugin in listdir(BASE_PATH):
-    if not isdir(join(BASE_PATH, plugin)) or plugin == ".git":
-        continue
+    for plugin in listdir(BASE_PATH):
+        if not isdir(join(BASE_PATH, plugin)) or plugin == ".git":
+            continue
 
-    # read plugin manifest
-    with open(join(BASE_PATH, plugin, "manifest.json")) as f:
-        manifest = loads(f.read())
+        # read plugin manifest
+        with open(join(BASE_PATH, plugin, "manifest.json")) as f:
+            manifest = loads(f.read())
 
-    # hash contents of plugin directory
-    dir_hash = hash_directory(join(BASE_PATH, plugin))
+        # hash contents of plugin directory
+        dir_hash = hash_directory(join(BASE_PATH, plugin))
 
-    new_index[plugin] = {
-        'checksum': dir_hash,
-        'desc': manifest['desc'],
-        'version': manifest['version'],
-    }
+        new_index[plugin] = {
+            'checksum': dir_hash,
+            'desc': manifest['desc'],
+            'version': manifest['version'],
+        }
 
-    if plugin in old_index:
-        if new_index[plugin]['checksum'] != old_index[plugin]['checksum'] and \
-                not new_index[plugin]['version'] > old_index[plugin]['version']:
-            raise ValueError("contents for {} changed, but version wasn't incremented".format(plugin))
+        if plugin in old_index:
+            if new_index[plugin]['checksum'] != old_index[plugin]['checksum'] and \
+                    not new_index[plugin]['version'] > old_index[plugin]['version']:
+                raise ValueError("contents for {} changed, but version wasn't incremented".format(plugin))
 
-        if new_index[plugin]['version'] > old_index[plugin]['version']:
-            print("{plugin}: version {oldversion} -> {newversion}".format(
-                newversion=new_index[plugin]['version'],
-                plugin=plugin,
-                oldversion=old_index[plugin]['version'],
-            ))
-    else:
-        print("{plugin}: added".format(plugin=plugin))
+            if new_index[plugin]['version'] > old_index[plugin]['version']:
+                print("{plugin}: version {oldversion} -> {newversion}".format(
+                    newversion=new_index[plugin]['version'],
+                    plugin=plugin,
+                    oldversion=old_index[plugin]['version'],
+                ))
+        else:
+            print("{plugin}: added".format(plugin=plugin))
 
-with open(join(BASE_PATH, "index.json"), "w") as f:
-    f.write(dumps(new_index, indent=4, sort_keys=True))
-
+    with open(join(BASE_PATH, "index.json"), "w") as f:
+        f.write(dumps(new_index, indent=4, sort_keys=True))
