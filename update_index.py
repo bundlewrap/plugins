@@ -59,4 +59,4 @@ if __name__ == '__main__':
             print("{plugin}: added".format(plugin=plugin))
 
     with open(join(BASE_PATH, "index.json"), "w") as f:
-        f.write(dumps(new_index, indent=4, sort_keys=True))
+        f.write(dumps(new_index, indent=4, sort_keys=True) + b"\n")
