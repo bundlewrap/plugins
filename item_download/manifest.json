@@ -1,0 +1,8 @@
+{
+	"desc": "Download a file from a webserver and verifies its Hash",
+	"help": "This item is meant for downloading and verifing a File from a Webserver. \n\nDemo Item: \ndownloads = {\n\t'/opt/bin/myFile': {\t\t'url': 'https://myServer.net/myFile',\n\t\t'sha256': '78abad9b589f303f6d9c129ed5ebfe240fbdbdaa5bb0ffec43dacb2991bd526a',\n\t}\n}",
+	"provides": [
+		"items/download.py"
+	],
+	"version": 1
+}
