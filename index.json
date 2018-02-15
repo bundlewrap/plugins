@@ -23,10 +23,5 @@
         "checksum": "701ae6ab27f32a716391005f528c51aac0007bdc", 
         "desc": "Automatically send notifications to Slack rooms with bw apply", 
         "version": 3
-    }, 
-    "pwget": {
-        "checksum": "59583c467c2558dd60492c2e82250453c853bd9d", 
-        "desc": "Derive passwords in your repo from a shared secret", 
-        "version": 10
     }
 }
