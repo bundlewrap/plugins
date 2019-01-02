@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import unicode_literals
+
 
 import hashlib
 from json import loads, dumps
@@ -18,14 +18,14 @@ def hash_directory(path):
     filelist.sort()
     for file in filelist:
             with open(join(root, file)) as f:
-                hasher.update(f.read())
+                hasher.update(f.read().encode("utf-8"))
     return hasher.hexdigest()
 
 
 if __name__ == '__main__':
     new_index = {}
     with open(join(BASE_PATH, "index.json")) as f:
-        old_index = loads(f.read())
+        old_index = loads(f.read().encode("utf-8"))
 
     for plugin in listdir(BASE_PATH):
         if not isdir(join(BASE_PATH, plugin)) or plugin == ".git":
@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
         # read plugin manifest
         with open(join(BASE_PATH, plugin, "manifest.json")) as f:
-            manifest = loads(f.read())
+            manifest = loads(f.read().encode("utf-8"))
 
         # hash contents of plugin directory
         dir_hash = hash_directory(join(BASE_PATH, plugin))
@@ -50,13 +50,13 @@ if __name__ == '__main__':
                 raise ValueError("contents for {} changed, but version wasn't incremented".format(plugin))
 
             if new_index[plugin]['version'] > old_index[plugin]['version']:
-                print("{plugin}: version {oldversion} -> {newversion}".format(
+                print(("{plugin}: version {oldversion} -> {newversion}".format(
                     newversion=new_index[plugin]['version'],
                     plugin=plugin,
                     oldversion=old_index[plugin]['version'],
-                ))
+                )))
         else:
-            print("{plugin}: added".format(plugin=plugin))
+            print(("{plugin}: added".format(plugin=plugin)))
 
     with open(join(BASE_PATH, "index.json"), "w") as f:
-        f.write(dumps(new_index, indent=4, sort_keys=True) + b"\n")
+        f.write(dumps(new_index, indent=4, sort_keys=True) + "\n")
