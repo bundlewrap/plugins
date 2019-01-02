@@ -1,6 +1,8 @@
 language: python
 install: true
-script: python test.py
+python:
+  - '3.5'
+script: ./test.py
 notifications:
   irc:
     channels:

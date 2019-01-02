@@ -17,12 +17,12 @@ def hash_directory(path):
             filelist.append(join(root, file))
     filelist.sort()
     for file in filelist:
-            with open(join(root, file)) as f:
-                hasher.update(f.read().encode("utf-8"))
+        with open(join(root, file)) as f:
+            hasher.update(f.read().encode("utf-8"))
     return hasher.hexdigest()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     new_index = {}
     with open(join(BASE_PATH, "index.json")) as f:
         old_index = loads(f.read().encode("utf-8"))
@@ -39,22 +39,32 @@ if __name__ == '__main__':
         dir_hash = hash_directory(join(BASE_PATH, plugin))
 
         new_index[plugin] = {
-            'checksum': dir_hash,
-            'desc': manifest['desc'],
-            'version': manifest['version'],
+            "checksum": dir_hash,
+            "desc": manifest["desc"],
+            "version": manifest["version"],
         }
 
         if plugin in old_index:
-            if new_index[plugin]['checksum'] != old_index[plugin]['checksum'] and \
-                    not new_index[plugin]['version'] > old_index[plugin]['version']:
-                raise ValueError("contents for {} changed, but version wasn't incremented".format(plugin))
+            if (
+                new_index[plugin]["checksum"] != old_index[plugin]["checksum"]
+                and not new_index[plugin]["version"] > old_index[plugin]["version"]
+            ):
+                raise ValueError(
+                    "contents for {} changed, but version wasn't incremented".format(
+                        plugin
+                    )
+                )
 
-            if new_index[plugin]['version'] > old_index[plugin]['version']:
-                print(("{plugin}: version {oldversion} -> {newversion}".format(
-                    newversion=new_index[plugin]['version'],
-                    plugin=plugin,
-                    oldversion=old_index[plugin]['version'],
-                )))
+            if new_index[plugin]["version"] > old_index[plugin]["version"]:
+                print(
+                    (
+                        "{plugin}: version {oldversion} -> {newversion}".format(
+                            newversion=new_index[plugin]["version"],
+                            plugin=plugin,
+                            oldversion=old_index[plugin]["version"],
+                        )
+                    )
+                )
         else:
             print(("{plugin}: added".format(plugin=plugin)))
 
