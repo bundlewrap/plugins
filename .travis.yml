@@ -6,6 +6,6 @@ script: ./test.py
 notifications:
   irc:
     channels:
-      - "irc.freenode.org#blockwart"
+      - "irc.freenode.org#bundlewrap"
     use_notice: true
     skip_join: true
