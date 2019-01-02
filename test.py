@@ -27,7 +27,7 @@ for plugin in listdir(BASE_PATH):
 
     # read plugin manifest
     with open(join(BASE_PATH, plugin, "manifest.json")) as f:
-        manifest = loads(f.read().encode("utf-8"))
+        manifest = loads(f.read())
 
     # hash plugin directory
     dir_hash = hash_directory(join(BASE_PATH, plugin))

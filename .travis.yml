@@ -1,7 +1,7 @@
 language: python
 install: true
 python:
-  - '3.5'
+  - '3.7'
 script: ./test.py
 notifications:
   irc:
