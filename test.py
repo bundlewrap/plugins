@@ -23,7 +23,7 @@ for plugin in listdir(BASE_PATH):
         or plugin == "__pycache__"
     ):
         continue
-    print(("{plugin}: checking...".format(plugin=plugin)))
+    print("{plugin}: checking...".format(plugin=plugin))
 
     # read plugin manifest
     with open(join(BASE_PATH, plugin, "manifest.json")) as f:
@@ -64,6 +64,6 @@ for plugin in listdir(BASE_PATH):
     if not isfile(join(BASE_PATH, plugin, "LICENSE")):
         fail("{plugin}: missing LICENSE".format(plugin=plugin))
 
-    print(("{plugin}: OK".format(plugin=plugin)))
+    print("{plugin}: OK".format(plugin=plugin))
 
 print("Everything seems to be in order.")

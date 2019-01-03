@@ -56,17 +56,13 @@ if __name__ == "__main__":
                 )
 
             if new_index[plugin]["version"] > old_index[plugin]["version"]:
-                print(
-                    (
-                        "{plugin}: version {oldversion} -> {newversion}".format(
-                            newversion=new_index[plugin]["version"],
-                            plugin=plugin,
-                            oldversion=old_index[plugin]["version"],
-                        )
-                    )
-                )
+                print("{plugin}: version {oldversion} -> {newversion}".format(
+                    newversion=new_index[plugin]["version"],
+                    plugin=plugin,
+                    oldversion=old_index[plugin]["version"],
+                ))
         else:
-            print(("{plugin}: added".format(plugin=plugin)))
+            print("{plugin}: added".format(plugin=plugin))
 
     with open(join(BASE_PATH, "index.json"), "w") as f:
         f.write(dumps(new_index, indent=4, sort_keys=True) + "\n")
