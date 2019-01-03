@@ -29,7 +29,7 @@ class Download(Item):
 
     def __hash_remote_file(self, filename):
         path_info = PathInfo(self.node, filename)
-        if path_info.path_type != "file":
+        if not path_info.is_file:
             return None
 
         if hasattr(path_info, 'sha256'):

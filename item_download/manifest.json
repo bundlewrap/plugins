@@ -4,5 +4,5 @@
 	"provides": [
 		"items/download.py"
 	],
-	"version": 1
+	"version": 2
 }
