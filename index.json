@@ -1,8 +1,8 @@
 {
     "item_download": {
-        "checksum": "55d04889a77dff6d9b96a5b9f0c7a3a407d2b1be",
+        "checksum": "367aa0f86cb68d42d77f340da74d803368213f90",
         "desc": "Download a file from a webserver and verifies its Hash",
-        "version": 2
+        "version": 3
     },
     "item_git_deploy": {
         "checksum": "63ee7962325d88ce8bc056d6bb3fde9ab7104074",

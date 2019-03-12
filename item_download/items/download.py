@@ -20,6 +20,7 @@ class Download(Item):
     ITEM_ATTRIBUTES = {
         'url': {},
         'sha256': {},
+        'verifySSL': True,
     }
     ITEM_TYPE_NAME = "download"
     REQUIRED_ATTRIBUTES = []
@@ -50,7 +51,11 @@ class Download(Item):
             pass
         else:
             # download file
-            self.node.run("curl -L -s -o {} -- {}".format(quote(self.name), quote(self.attributes.get('url'))))
+            self.node.run("curl -L {verify}-s -o {file} -- {url}".format(
+                verify="" if self.attributes.get('verifySSL', True) else "-k ",
+                file=quote(self.name),
+                url=quote(self.attributes.get('url'))
+            ))
 
             # check hash
             sha256 = self.__hash_remote_file(self.name)
