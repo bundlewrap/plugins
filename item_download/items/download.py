@@ -18,8 +18,8 @@ class Download(Item):
         "pkg_zypper:",
     ]
     ITEM_ATTRIBUTES = {
-        'url': {},
-        'sha256': {},
+        'url': "",
+        'sha256': "",
         'verifySSL': True,
     }
     ITEM_TYPE_NAME = "download"
@@ -54,13 +54,13 @@ class Download(Item):
             self.node.run("curl -L {verify}-s -o {file} -- {url}".format(
                 verify="" if self.attributes.get('verifySSL', True) else "-k ",
                 file=quote(self.name),
-                url=quote(self.attributes.get('url'))
+                url=quote(self.attributes['url'])
             ))
 
             # check hash
             sha256 = self.__hash_remote_file(self.name)
 
-            if sha256 != self.attributes.get('sha256'):
+            if sha256 != self.attributes['sha256']:
                 # unlink file
                 self.node.run("rm -rf -- {}".format(quote(self.name)))
 
@@ -70,7 +70,7 @@ class Download(Item):
         """This is how the world should be"""
         cdict = {
             'type': 'download',
-            'sha256': self.attributes.get('sha256'),
+            'sha256': self.attributes['sha256'],
         }
 
         return cdict
@@ -90,7 +90,7 @@ class Download(Item):
 
     @classmethod
     def validate_attributes(cls, bundle, item_id, attributes):
-        if not attributes.get('sha256', None):
+        if 'sha256' not in attributes:
             raise BundleError(_(
                 "at least one hash must be set on {item} in bundle '{bundle}'"
             ).format(
@@ -98,7 +98,7 @@ class Download(Item):
                 item=item_id,
             ))
 
-        if not attributes.get('url', None):
+        if 'url' not in attributes:
             raise BundleError(_(
                 "you need to specify the url on {item} in bundle '{bundle}'"
             ).format(
