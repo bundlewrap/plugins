@@ -4,11 +4,6 @@
         "desc": "Download a file from a webserver and verifies its Hash",
         "version": 4
     },
-    "item_git_deploy": {
-        "checksum": "63ee7962325d88ce8bc056d6bb3fde9ab7104074",
-        "desc": "Item type for managing git checkouts",
-        "version": 6
-    },
     "itermstats": {
         "checksum": "5362cba892b1975a528eaa63b135b39f389f3639",
         "desc": "Pretty stats using iTerm2 PNG support and pygal",
